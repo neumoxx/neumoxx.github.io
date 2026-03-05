@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="neumo (Javi Torres) — Protocol security researcher specializing in smart contract systems and blockchain infrastructure vulnerabilities." />
+  <title>neumo — Protocol Security Researcher</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="neumo — Protocol Security Researcher" />
+  <meta property="og:description" content="Top 50 all-time on Immunefi (currently #54), #14 in 2024. Lead auditor: Zest, Hermetica, Bitflow, Hoenn, Layer3.xyz. Criticals in DeFi & infra." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --faint: rgba(255,255,255,.50);
+      --border: rgba(255,255,255,.12);
+      --accent: #60a5fa; /* blue-400 */
+      --accent2: #22c55e; /* green-500 */
+      --warn: #f59e0b; /* amber-500 */
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    /* Light mode support (optional) */
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg: #f7fafc;
+        --panel: rgba(15,23,42,.05);
+        --panel2: rgba(15,23,42,.07);
+        --text: rgba(2,6,23,.92);
+        --muted: rgba(2,6,23,.72);
+        --faint: rgba(2,6,23,.55);
+        --border: rgba(2,6,23,.10);
+        --shadow: 0 18px 60px rgba(2,6,23,.10);
+      }
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height: 100%; }
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background:
+        radial-gradient(1000px 600px at 18% 8%, rgba(96,165,250,.30), transparent 62%),
+        radial-gradient(900px 520px at 85% 18%, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(760px 520px at 60% 80%, rgba(245,158,11,.14), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a{ color: var(--text); text-decoration: none; }
+    a:hover{ text-decoration: underline; text-underline-offset: 3px; }
+
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 44px 18px 64px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pillrow{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .pill{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+      display:inline-flex;
+      gap: 8px;
+      align-items:center;
+      transition: transform .12s ease, background .12s ease;
+      box-shadow: none;
+    }
+    .pill:hover{
+      background: var(--panel2);
+      transform: translateY(-1px);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .dot{ width: 7px; height: 7px; border-radius: 999px; background: var(--accent); display:inline-block; }
+    .dot.green{ background: var(--accent2); }
+    .dot.warn{ background: var(--warn); }
+
+    header{
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      border-radius: 22px;
+      padding: 26px 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(900px 260px at 20% 0%, rgba(96,165,250,.25), transparent 65%);
+      pointer-events:none;
+    }
+
+    .hero{
+      position: relative;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .kicker{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: .02em;
+    }
+
+    h1{
+      margin: 0;
+      font-size: clamp(34px, 4.8vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle{
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .proof{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .chip strong{ color: var(--text); font-weight: 650; }
+
+    .grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1.05fr .95fr; }
+    }
+
+    section.card{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 18px 18px;
+      box-shadow: none;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-weight: 700;
+    }
+
+    .list{
+      display:grid;
+      gap: 10px;
+    }
+
+    .item{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px 12px;
+    }
+
+    .item-head{
+      display:flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .item-title{
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+
+    .tagline{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--faint);
+    }
+
+    .meta{
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .badge{
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      white-space: nowrap;
+    }
+    .badge.critical{ border-color: rgba(245,158,11,.35); color: rgba(245,158,11,.95); }
+    .badge.high{ border-color: rgba(96,165,250,.35); color: rgba(96,165,250,.98); }
+    .badge.lead{ border-color: rgba(34,197,94,.28); color: rgba(34,197,94,.95); }
+
+    .links{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .links a{
+      font-family: var(--mono);
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+    }
+    .links a:hover{
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      text-decoration:none;
+    }
+
+    footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      flex-wrap: wrap;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      opacity: .95;
+    }
+
+    .small{
+      font-size: 12px;
+      color: var(--faint);
+      font-family: var(--mono);
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="topbar">
+      <div class="small">Barcelona, Spain</div>
+      <div class="pillrow" aria-label="quick links">
+        <a class="pill" href="mailto:neumoxx@protonmail.com" title="Email">
+          <span class="dot"></span> Email
+        </a>
+        <a class="pill" href="https://github.com/neumoxx" target="_blank" rel="noreferrer" title="GitHub">
+          <span class="dot green"></span> GitHub
+        </a>
+        <a class="pill" href="https://x.com/neumoXX" target="_blank" rel="noreferrer" title="X">
+          <span class="dot warn"></span> X
+        </a>
+        <a class="pill" href="https://immunefi.com/profile/neumo/" target="_blank" rel="noreferrer" title="Immunefi profile">
+          <span class="dot"></span> Immunefi
+        </a>
+        <a class="pill" href="https://neumo.hashnode.dev/" target="_blank" rel="noreferrer" title="Blog">
+          <span class="dot green"></span> Research
+        </a>
+      </div>
+    </div>
+
+    <header>
+      <div class="hero">
+        <div class="kicker">neumo (Javi Torres)</div>
+        <h1>Protocol Security Researcher</h1>
+        <div class="subtitle">
+          Smart contract systems, protocol design, and blockchain infrastructure vulnerabilities.
+          <br />
+          <span class="small">Top 50 all-time on Immunefi (currently #54) · #14 in 2024 · Lead auditor: Zest, Hermetica, Bitflow, Hoenn, Layer3.xyz</span>
+        </div>
+
+        <div class="proof" role="list" aria-label="proof points">
+          <div class="chip" role="listitem"><span class="dot"></span><strong>Immunefi</strong> Top 50 all-time (currently #54)</div>
+          <div class="chip" role="listitem"><span class="dot warn"></span><strong>2024</strong> #14 Immunefi leaderboard</div>
+          <div class="chip" role="listitem"><span class="dot green"></span><strong>Lead</strong> Auditor on 5 protocols</div>
+          <div class="chip" role="listitem"><span class="dot"></span><strong>Rust</strong> NEAR + infra review</div>
+        </div>
+
+        <div class="links" aria-label="primary links">
+          <a href="https://github.com/neumoxx/security-research" target="_blank" rel="noreferrer">Portfolio (GitHub)</a>
+          <a href="https://neumo.hashnode.dev/" target="_blank" rel="noreferrer">Writeups</a>
+          <a href="https://immunefi.com/profile/neumo/" target="_blank" rel="noreferrer">Leaderboard</a>
+          <a href="mailto:neumoxx@protonmail.com">Contact</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card" id="vulns">
+        <div class="section-title">
+          <h2>Selected vulnerabilities</h2>
+          <span class="badge">public</span>
+        </div>
+
+        <div class="list">
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">NEAR blockchain network shutdown (near-core)</div>
+              <span class="badge critical">CRITICAL</span>
+            </div>
+            <div class="meta">
+              Discovered a flaw in near-core that could halt the entire network.
+            </div>
+            <div class="links">
+              <a href="https://neumo.hashnode.dev/total-near" target="_blank" rel="noreferrer">Writeup</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Stacks NFT theft vector via phishing (protocol design)</div>
+              <span class="badge high">HIGH</span>
+            </div>
+            <div class="meta">
+              Design issue enabling NFT theft through an easy-to-perform phishing attack.
+            </div>
+            <div class="links">
+              <a href="https://neumo.hashnode.dev/a-questionable-design-choice-in-stacksclarity" target="_blank" rel="noreferrer">Writeup</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Additional critical findings (private disclosure)</div>
+              <span class="badge">NDA</span>
+            </div>
+            <div class="meta">
+              Multiple critical vulnerabilities reported via Immunefi and HackenProof (details restricted by program rules).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="leaderboards">
+        <div class="section-title">
+          <h2>Leaderboards</h2>
+          <span class="badge">signal</span>
+        </div>
+        <div class="list">
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Immunefi</div>
+              <span class="badge">Top 50 all-time</span>
+            </div>
+            <div class="meta">Currently #54 · #14 in 2024</div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Certora</div>
+              <span class="badge">#9</span>
+            </div>
+            <div class="meta">Formal verification contests (Certora Prover)</div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Cantina</div>
+              <span class="badge">#91 / 1,267</span>
+            </div>
+            <div class="meta">Contest track record (incl. Euler on Cantina)</div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Sherlock</div>
+              <span class="badge">#199 / 1,113</span>
+            </div>
+            <div class="meta">Past contest participation</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" id="audits" style="margin-top:16px;">
+      <div class="section-title">
+        <h2>Audit experience</h2>
+        <span class="badge lead">lead auditor</span>
+      </div>
+
+      <div class="list">
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">Zest Protocol <span class="tagline">(Stacks)</span></div>
+            <span class="badge lead">Lead</span>
+          </div>
+          <div class="meta">Stacks lending protocol.</div>
+          <div class="links">
+            <a href="https://github.com/greybeard-security/audit-reports/blob/main/zest-v2-2025-10.pdf" target="_blank" rel="noreferrer">Report</a>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">Hermetica <span class="tagline">(Stacks)</span></div>
+            <span class="badge lead">Lead</span>
+          </div>
+          <div class="meta">Bitcoin-backed synthetic asset protocol.</div>
+          <div class="links">
+            <a href="https://github.com/greybeard-security/audit-reports/blob/main/hermetica-hbtc-2025-11.pdf" target="_blank" rel="noreferrer">Report</a>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">Bitflow <span class="tagline">(Stacks)</span></div>
+            <span class="badge lead">Lead</span>
+          </div>
+          <div class="meta">AMM protocol on Stacks.</div>
+          <div class="links">
+            <a href="https://github.com/greybeard-security/audit-reports/blob/main/bitflow-HODLMM-2025-10.pdf" target="_blank" rel="noreferrer">Report</a>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">Hoenn <span class="tagline">(EVM)</span></div>
+            <span class="badge lead">Lead</span>
+          </div>
+          <div class="meta">Audit performed through Immunefi.</div>
+          <div class="links">
+            <a href="https://assets.ctfassets.net/t3wqy70tc3bv/62rrT36yP4wJddWRtoIr91/d0635eb8e19f72c0c2ad7442c7eff348/Hoenn_-_Immunefi_Audit_Report.pdf" target="_blank" rel="noreferrer">Report</a>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">Layer3.xyz <span class="tagline">(EVM)</span></div>
+            <span class="badge lead">Lead</span>
+          </div>
+          <div class="meta">Audit performed through Immunefi.</div>
+          <div class="links">
+            <a href="https://assets.ctfassets.net/t3wqy70tc3bv/3AKcQn3fFAih0wIRLy8aTn/9823cf3d359b06ca4d1039270e3c1895/Layer3.xyz-_Audit_Report.pdf" target="_blank" rel="noreferrer">Report</a>
+          </div>
+        </div>
+
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">Collaboration</div>
+            <span class="badge">100proof</span>
+          </div>
+          <div class="meta">Worked closely with researcher <strong>100proof</strong> (co-lead) for ~1.5 years.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid" style="margin-top:16px;">
+      <section class="card" id="contests">
+        <div class="section-title">
+          <h2>Contest highlights</h2>
+          <span class="badge">results</span>
+        </div>
+        <div class="list">
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Code4rena — Certora GMX Formal Verification</div>
+              <span class="badge">1st</span>
+            </div>
+            <div class="links">
+              <a href="https://code4rena.com/reports/2023-08-gmx-fv" target="_blank" rel="noreferrer">Report</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Sherlock — Notional Update #3</div>
+              <span class="badge">1st</span>
+            </div>
+            <div class="links">
+              <a href="https://audits.sherlock.xyz/contests/64/leaderboard" target="_blank" rel="noreferrer">Leaderboard</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Code4rena — Blockswap Formal Verification</div>
+              <span class="badge">2nd</span>
+            </div>
+            <div class="links">
+              <a href="https://code4rena.com/reports/2023-01-blockswap-fv" target="_blank" rel="noreferrer">Report</a>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Sherlock — Syndr</div>
+              <span class="badge">2nd</span>
+            </div>
+            <div class="links">
+              <a href="https://audits.sherlock.xyz/contests/46/leaderboard" target="_blank" rel="noreferrer">Leaderboard</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="technical">
+        <div class="section-title">
+          <h2>Technical</h2>
+          <span class="badge">stack</span>
+        </div>
+        <div class="list">
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Languages</div>
+              <span class="badge">primary</span>
+            </div>
+            <div class="meta">Solidity · Clarity · Rust (NEAR smart contracts)</div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Security focus</div>
+              <span class="badge">methods</span>
+            </div>
+            <div class="meta">Manual review · exploit PoCs · attack surface modeling · invariant thinking · formal verification</div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Tools</div>
+              <span class="badge">workflow</span>
+            </div>
+            <div class="meta">Foundry · Slither · Echidna · Certora Prover</div>
+          </div>
+
+          <div class="item">
+            <div class="item-head">
+              <div class="item-title">Background</div>
+              <span class="badge">14y</span>
+            </div>
+            <div class="meta">Former Founder & CTO (Sonicon Systems) · Telecommunication Engineer (UPC Barcelona)</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" id="contact" style="margin-top:16px;">
+      <div class="section-title">
+        <h2>Contact</h2>
+        <span class="badge">let's talk</span>
+      </div>
+      <div class="meta">
+        Best way to reach me: <a href="mailto:neumoxx@protonmail.com">neumoxx@protonmail.com</a><br/>
+        Also on X: <a href="https://x.com/neumoXX" target="_blank" rel="noreferrer">x.com/neumoXX</a>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> neumo</div>
+      <div class="small">Built for GitHub Pages · Single-file site</div>
+    </footer>
+
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
