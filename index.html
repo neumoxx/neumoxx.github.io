@@ -132,17 +132,21 @@
     }
 
     .kicker{
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: .02em;
+      font-family: var(--sans);
+      font-size: clamp(30px, 4.4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      font-weight: 800;
+      color: var(--text);
     }
 
     h1{
       margin: 0;
-      font-size: clamp(34px, 4.8vw, 52px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
+      font-size: clamp(22px, 2.2vw, 30px);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+      color: var(--muted);
     }
 
     .subtitle{
@@ -329,7 +333,7 @@
     <header>
       <div class="hero">
         <div class="kicker">neumo</div>
-        <h3>Protocol Security Researcher</h1>
+        <h1>Protocol Security Researcher</h1>
         <div class="subtitle">
           Smart contract systems, protocol design, and blockchain infrastructure vulnerabilities.
           <br />
